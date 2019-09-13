@@ -1,4 +1,5 @@
-﻿using System.Windows;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,6 +11,13 @@ namespace CommonWPFTools.UserControls
     /// </summary>
     public partial class NumericSpinner : UserControl
     {
+        /// <summary>
+        /// Delay after which the error message will disapear.
+        /// </summary>
+        private const int ErrorMessageTimoutDelay = 3000;
+        private readonly Brush ControlsBorderBrush;
+        private readonly Thickness ControlBorderThickness;
+        
         public NumericSpinner()
         {
             InitializeComponent();
@@ -39,16 +47,6 @@ namespace CommonWPFTools.UserControls
                 );
         }
         
-        /// <summary>
-        /// Delay after which the error message will disapear.
-        /// </summary>
-        private const int ErrorMessageTimoutDelay = 3000;
-
-
-        private readonly Brush ControlsBorderBrush;
-        private readonly Thickness ControlBorderThickness;
-
-
         #region ValueProperty
 
         public static readonly DependencyProperty ValueProperty =
@@ -191,14 +189,57 @@ namespace CommonWPFTools.UserControls
         }
         private bool StepUpButton_CanExecute => Value < MaxValue;
         private void StepUpButton_Executed() => Value += Step;
+
+        RelayCommand _MouseWheelUpAction; public ICommand MouseWheelUpAction
+        {
+            get
+            {
+                if (_MouseWheelUpAction == null)
+                {
+                    _MouseWheelUpAction = new RelayCommand(
+                        param => MouseWheelUpAction_Executed(),
+                        param => MouseWheelUpAction_CanExecute);
+                }
+                return _MouseWheelUpAction;
+            }
+        }
+        private bool MouseWheelUpAction_CanExecute => Value < MaxValue;
+        private void MouseWheelUpAction_Executed()
+        {
+            Value += Step;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        RelayCommand _MouseWheelDownAction; public ICommand MouseWheelDownAction
+        {
+            get
+            {
+                if (_MouseWheelDownAction == null)
+                {
+                    _MouseWheelDownAction = new RelayCommand(
+                        param => MouseWheelDownAction_Executed(),
+                        param => MouseWheelDownAction_CanExecute);
+                }
+                return _MouseWheelDownAction;
+            }
+        }
+        private bool MouseWheelDownAction_CanExecute => Value > MinValue;
+        private void MouseWheelDownAction_Executed()
+        {
+            Value -= Step;
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+
         #endregion
 
         private void TextBoxMain_TextChanged(object sender, TextChangedEventArgs e)
         {
             var Error = false;
+            
             if (string.IsNullOrEmpty(TextboxMain.Text))
                 return;
-
+                
             if (!int.TryParse(TextboxMain.Text, out _))
             {
                 e.Handled = true;
@@ -239,13 +280,44 @@ namespace CommonWPFTools.UserControls
             tt.IsOpen = false;
         }
 
-        private void Control_MouseWheel(object sender, MouseWheelEventArgs e)
+    }
+
+
+    public class MouseWheelUp : MouseGesture
+    {
+        public MouseWheelUp() : base(MouseAction.WheelClick)
         {
-            if (e.Delta > 0)
-            { if (Value < MaxValue) StepUpButton_Executed(); }
-            else if (e.Delta < 0)
-            { if (Value > MinValue) StepDownButton_Executed(); }
-            e.Handled = true;
+        }
+
+        public MouseWheelUp(ModifierKeys modifiers) : base(MouseAction.WheelClick, modifiers)
+        {
+        }
+
+        public override bool Matches(object targetElement, InputEventArgs inputEventArgs)
+        {
+            if (!base.Matches(targetElement, inputEventArgs)) return false;
+            if (!(inputEventArgs is MouseWheelEventArgs)) return false;
+            var args = (MouseWheelEventArgs)inputEventArgs;
+            return args.Delta > 0;
         }
     }
+    public class MouseWheelDown : MouseGesture
+    {
+        public MouseWheelDown() : base(MouseAction.WheelClick)
+        {
+        }
+
+        public MouseWheelDown(ModifierKeys modifiers) : base(MouseAction.WheelClick, modifiers)
+        {
+        }
+
+        public override bool Matches(object targetElement, InputEventArgs inputEventArgs)
+        {
+            if (!base.Matches(targetElement, inputEventArgs)) return false;
+            if (!(inputEventArgs is MouseWheelEventArgs)) return false;
+            var args = (MouseWheelEventArgs)inputEventArgs;
+            return args.Delta < 0;
+        }
+    }
+
 }
