@@ -1,5 +1,5 @@
 # CommonWPFTools.NumericSpinner
-Numeric Up Down Spinner for WPF
+Numeric Up Down Spinner for WPF .Net Core
 
 ![Image of Spinner](https://github.com/phamilton4321/CommonWPFTools.NumericSpinner/raw/master/NumericSpinner_default.png "Example view of the control")
 
