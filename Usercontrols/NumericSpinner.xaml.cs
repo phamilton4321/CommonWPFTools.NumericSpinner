@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,7 +16,7 @@ namespace CommonWPFTools.UserControls
         private const int ErrorMessageTimoutDelay = 3000;
         private readonly Brush ControlsBorderBrush;
         private readonly Thickness ControlBorderThickness;
-        
+
         public NumericSpinner()
         {
             InitializeComponent();
@@ -30,23 +29,22 @@ namespace CommonWPFTools.UserControls
         /// <summary>
         /// Define your error message string here
         /// </summary>
-        private string ErrorMessageInPopup
-        {
-            /// <summary>
-            /// Message which pops up if value is out of range
-            /// </summary>
-            get => string.Concat
+        private string ErrorMessageInPopup => string.Concat
                 (
-                    "Invalid value",
+                    /*(string)FindResource("ErrorMessageTitle")*/
+                    CommonWPFTools.NumericSpinner.Properties.Resources.ErrorMessageTitle,
                     "\r\n",
-                    "Valid values are numbers between ",
-                        MinValue.ToString(),
-                    " and ",
-                        MaxValue.ToString(),
-                    "!"
+                    CommonWPFTools.NumericSpinner.Properties.Resources.ErrorMessageFirstPart,
+                    " ",
+                    MinValue.ToString(),
+                    " ",
+                    CommonWPFTools.NumericSpinner.Properties.Resources.ErrorMessageMiddlePart,
+                    " ",
+                    MaxValue.ToString(),
+                    " ",
+                    CommonWPFTools.NumericSpinner.Properties.Resources.ErrorMessageLastPart
                 );
-        }
-        
+
         #region ValueProperty
 
         public static readonly DependencyProperty ValueProperty =
@@ -94,6 +92,25 @@ namespace CommonWPFTools.UserControls
 
         #endregion
 
+        #region CornerRadius Property
+        public readonly static DependencyProperty CornerRadiusProperty = DependencyProperty.Register(
+            "CornerRadiusValue",
+            typeof(double),
+            typeof(NumericSpinner),
+            new PropertyMetadata(3.0)); //Default value 3
+
+        public double CornerRadiusValue
+        {
+            get { return (double)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+
+        public CornerRadius TextBoxCorners { get => new CornerRadius((double)GetValue(CornerRadiusProperty), 0, 0, (double)GetValue(CornerRadiusProperty)); }
+        public CornerRadius CustomCornerRadius { get => new CornerRadius((double)GetValue(CornerRadiusProperty), (double)GetValue(CornerRadiusProperty), (double)GetValue(CornerRadiusProperty), (double)GetValue(CornerRadiusProperty)); }
+        public CornerRadius CustomCornerRadiusUpButton { get => new CornerRadius(0, (double)GetValue(CornerRadiusProperty), 0, 0); }
+        public CornerRadius CustomCornerRadiusDownButton { get => new CornerRadius(0, 0, (double)GetValue(CornerRadiusProperty), 0); }
+
+        #endregion
         #region StepProperty
 
         public readonly static DependencyProperty StepProperty = DependencyProperty.Register(
@@ -141,7 +158,7 @@ namespace CommonWPFTools.UserControls
             typeof(int),
             typeof(NumericSpinner),
             new PropertyMetadata(int.MaxValue));
-        
+
 
         public int MaxValue
         {
@@ -236,10 +253,10 @@ namespace CommonWPFTools.UserControls
         private void TextBoxMain_TextChanged(object sender, TextChangedEventArgs e)
         {
             var Error = false;
-            
+
             if (string.IsNullOrEmpty(TextboxMain.Text))
                 return;
-                
+
             if (!int.TryParse(TextboxMain.Text, out _))
             {
                 e.Handled = true;
@@ -263,7 +280,7 @@ namespace CommonWPFTools.UserControls
                 Content = ErrorMessageInPopup,
                 HasDropShadow = true,
                 Placement = System.Windows.Controls.Primitives.PlacementMode.Right,
-                PlacementTarget =MyBorder,
+                PlacementTarget = MyBorder,
 
             };
             tt.IsOpen = true;

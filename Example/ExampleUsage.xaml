@@ -20,14 +20,15 @@
             </TextBlock>
             <WrapPanel HorizontalAlignment="Center" >
                 <Label Content="Numeric Spinner in Action: "/>
-                <usercontrols:NumericSpinner MinValue="1" MaxValue="15" Value="5"/>
+                <usercontrols:NumericSpinner MinValue="1" MaxValue="15" Value="5" CornerRadiusValue="1"/>
             </WrapPanel>
 
             <TextBlock Margin="20">
                 <Run>In this example the following properties have been used:</Run><LineBreak/>
                 <Run Block.TextAlignment="Center">MinValue: 1</Run><LineBreak/>
                 <Run>MaxValue: 15</Run><LineBreak/>
-                <Run>Value: 5</Run>
+                <Run>Value: 5</Run><LineBreak/>
+                <Run>CornerRadiusValue: 1</Run>
             </TextBlock>
         </StackPanel>
     </Grid>

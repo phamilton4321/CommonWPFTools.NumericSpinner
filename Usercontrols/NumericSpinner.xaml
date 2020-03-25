@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CommonWPFTools.UserControls"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="25" d:DesignWidth="100" FontFamily="Verdana">
+             d:DesignHeight="25" d:DesignWidth="100" FontFamily="Verdana"
+             >
     <UserControl.InputBindings>
         <MouseBinding Command="{Binding MouseWheelUpAction, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}}">
             <MouseBinding.Gesture>
@@ -22,38 +22,10 @@
     <UserControl.Resources>
 
         <ResourceDictionary>
-
-            <!-- 
-                /// If you want the element to have rounded corners, set Value for Resource CornerRadiiusValue for this element.
-            -->
-            <sys:Double x:Key="CornerRadiusValue">3</sys:Double>
-
-
-            <!-- #region Calculate CornerRadius values by defined CornerRadiusValue -->
-            <CornerRadius x:Key="CustomCornerRadiusBorder"
-                       TopLeft="{StaticResource CornerRadiusValue}"
-                       BottomLeft="{StaticResource CornerRadiusValue}"
-                       TopRight="{StaticResource CornerRadiusValue}"
-                       BottomRight="{StaticResource CornerRadiusValue}"
-                       />
-
-            <CornerRadius x:Key="CustomCornerRadiusTextBox"
-                       TopLeft="{StaticResource CornerRadiusValue}"
-                       BottomLeft="{StaticResource CornerRadiusValue}"
-                       TopRight="0"
-                       BottomRight="0"
-                       />
-            <CornerRadius x:Key="CustomCornerRadiusUpButton"
-                          TopRight="{StaticResource CornerRadiusValue}"
-                          TopLeft="0" BottomLeft="0" BottomRight="0"/>
             <Thickness x:Key="CustomThicknessUpButton"
                        Left="0" Top="1" Right="1" Bottom="0"/>
-            <CornerRadius x:Key="CustomCornerRadiusDownButton"
-                          BottomRight="{StaticResource CornerRadiusValue}"
-                          TopRight="0" BottomLeft="0" TopLeft="0"/>
             <Thickness x:Key="CustomThicknessDownButton"
                        Left="0" Top="0" Right="1" Bottom="1"/>
-            <!-- #endregion -->
 
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" x:Key="BackgroundUpCmd">
                 <GradientStop Color="#FFD1CACA" Offset="1"/>
@@ -94,7 +66,6 @@
             <Style TargetType="Button">
                 <Setter Property="Template" Value="{StaticResource updown_button_style}" />
             </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -109,13 +80,13 @@
         </Grid.ColumnDefinitions>
         <!-- #endregion -->
 
-        <TextBox x:Name="TextboxMain" x:FieldModifier="private" FontWeight="Normal" FontSize="12px" VerticalContentAlignment="Center" Padding="8,1" 
+        <TextBox x:Name="TextboxMain" x:FieldModifier="private" FontWeight="Normal" FontSize="12px" VerticalContentAlignment="Center" Padding="8,3" 
                      Grid.Column="0" Grid.RowSpan="2"  TextChanged="TextBoxMain_TextChanged"
                      Text="{Binding Value, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}, UpdateSourceTrigger=PropertyChanged}" 
                      BorderThickness="0,0,1,0">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="{StaticResource CustomCornerRadiusTextBox}"/>
+                    <Setter Property="CornerRadius" Value="{Binding TextBoxCorners, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}, Mode=OneWay}"/>
                 </Style>
             </TextBox.Resources>
         </TextBox>
@@ -128,7 +99,7 @@
                 Background="{StaticResource BackgroundUpCmd}">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="{StaticResource CustomCornerRadiusUpButton}"/>
+                    <Setter Property="CornerRadius" Value="{Binding CustomCornerRadiusUpButton, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}}"/>
                     <Setter Property="BorderThickness" Value="{StaticResource CustomThicknessUpButton}"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
@@ -145,7 +116,7 @@
                 Background="{StaticResource BackgroundDownCmd}">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="{StaticResource CustomCornerRadiusDownButton}"/>
+                    <Setter Property="CornerRadius" Value="{Binding CustomCornerRadiusDownButton, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}}"/>
                     <Setter Property="BorderThickness" Value="{StaticResource CustomThicknessDownButton}"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
@@ -158,7 +129,7 @@
 
         <Border x:Name="MyBorder" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" IsHitTestVisible="False" 
                     BorderThickness="1" Background="{x:Null}" 
-                    CornerRadius="{StaticResource CustomCornerRadiusBorder}"
+                    CornerRadius="{Binding CustomCornerRadius, RelativeSource={RelativeSource AncestorType=local:NumericSpinner}}"
                     Grid.RowSpan="2" Grid.ColumnSpan="2" Padding="0" Margin="0"/>
     </Grid>
 </UserControl>

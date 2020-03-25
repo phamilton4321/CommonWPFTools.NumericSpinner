@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ErrorMessageFirstPart" xml:space="preserve">
-    <value>Valid values are numbers between</value>
+    <value>Werte müssen zwischen</value>
     <comment>First part of Error Message before lowest value</comment>
   </data>
   <data name="ErrorMessageLastPart" xml:space="preserve">
-    <value>!</value>
+    <value>sein!</value>
     <comment>Last part of Error Message</comment>
   </data>
   <data name="ErrorMessageMiddlePart" xml:space="preserve">
-    <value>and</value>
+    <value>und</value>
     <comment>Middle part of Error Message between lowest and maximum value</comment>
   </data>
   <data name="ErrorMessageTitle" xml:space="preserve">
-    <value>Invalid value</value>
+    <value>Ungültiger Wert</value>
     <comment>Title of error message</comment>
   </data>
 </root>
