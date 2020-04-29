@@ -43,6 +43,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if Release == $(ConfigurationName) (&#xD;&#xA;&quot;C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool\signtool.exe&quot; sign /f &quot;$(ProjectDir)ITK-Zertifikat.pfx&quot; /p Wasser324 &quot;$(TargetPath)&quot;&#xD;&#xA;)" />
+  </Target>
 
 </Project>
