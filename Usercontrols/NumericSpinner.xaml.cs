@@ -37,13 +37,13 @@ namespace CommonWPFTools.UserControls
             /// </summary>
             get => string.Concat
                 (
-                    "Invalid value",
+                    "Ungültiger Wert",
                     "\r\n",
-                    "Valid values are numbers between ",
+                    "Werte müssen zwischen ",
                         MinValue.ToString(),
-                    " and ",
+                    " und ",
                         MaxValue.ToString(),
-                    "!"
+                    " sein!"
                 );
         }
         
